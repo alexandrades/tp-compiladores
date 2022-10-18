@@ -2,14 +2,23 @@ package edu.ufsj.lox;
 
 import java.util.List; 
 
-import static edu.ufsj.lox.TokenType.*; 
+import static edu.ufsj.lox.TokenType.*;
 
 class Parser {
+	private static class ParseError extends RuntimeException {}
 	private final List<Token> tokens; 
 	private int current = 0; 
 
 	Parser(List<Token> tokens) {
-		this.tokens = tokens; 
+		this.tokens = tokens;
+	}
+
+	Expr parse() {
+		try {
+			return expression();
+		} catch (ParseError e) {
+			return null;
+		}
 	}
 
 	private Expr expression() {
@@ -122,9 +131,39 @@ class Parser {
 			return new Expr.Grouping(expr); 
 		}
 
-		return null; //precisa disso para funciona, por enquanto!
+		throw error(peek(), "Expect expression."); //precisa disso para funciona, por enquanto!
 	}
 
-	private void consume(TokenType t, String msg) {
+	private Token consume(TokenType token, String message) {
+		if(check(token))
+			return advance();
+		throw error(peek(), message);
+	}
+
+
+	private ParseError error(Token token, String message) {
+		Lox.error(token, message);
+		return new ParseError();
+	}
+
+	private void synchronize() {
+		advance();
+		while(!isAtEnd()) {
+			if(previous().type == SEMICOLON) {
+				return;
+			}
+			switch(peek().type) {
+				case CLASS:
+				case FUN:
+				case VAR:
+				case FOR:
+				case IF:
+				case WHILE:
+				case PRINT:
+				case RETURN:
+				return;
+			}
+			advance();
+		}
 	}
 }
