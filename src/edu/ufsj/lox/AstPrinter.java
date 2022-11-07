@@ -11,6 +11,13 @@ class AstPrinter implements Expr.Visitor<String> {
 	                        expr.left, expr.right);
 	  }
 
+
+	  @Override
+	  public String visitTernaryExpr(Expr.Ternary expr) {
+	    return parenthesize(expr.expr,
+	                        expr.ifTrue, expr.ifFalse);
+	  }
+
 	  @Override
 	  public String visitGroupingExpr(Expr.Grouping expr) {
 	    return parenthesize("group", expr.expression);
@@ -38,6 +45,16 @@ class AstPrinter implements Expr.Visitor<String> {
 
 		    return builder.toString();
 	  }
+
+
+	  private String parenthesize(Expr expr, Expr ifTrue, Expr ifFalse) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("(").append(expr.accept(this)).append(" ").append(ifTrue.accept(this)).append(" ").append(ifFalse.accept(this));
+		builder.append(")");
+
+		return builder.toString();
+  }
 
 	
 	    /*private String parenthesize2(String name, Object... parts) {
