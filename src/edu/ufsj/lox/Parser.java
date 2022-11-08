@@ -22,11 +22,7 @@ class Parser {
 	}
 
 	private Expr expression() {
-		Expr expr = equality();
-
-		if(match(INTERROGATION)) {
-			expr = ternary(expr);
-		}
+		Expr expr = ternary();
 
 		return expr;
 	}
@@ -123,11 +119,13 @@ class Parser {
 	}
 
 	private Expr ternary(Expr expr) {
-		if(previous().type == INTERROGATION) {
-			Expr ifTrue = equality();
+		Expr expr = equality()
+
+		if(match(INTERROGATION)) {
+			Expr ifTrue = expression();
 
 			if(match(TWO_DOTS)){
-				Expr ifFalse = equality();
+				Expr ifFalse = ternary();
 				expr = new Expr.Ternary(expr, ifTrue, ifFalse);
 			}
 		}

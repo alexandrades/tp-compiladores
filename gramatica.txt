@@ -1,5 +1,5 @@
 〈expression〉 ::= <equality> | 〈ternary〉;
-〈ternary〉 ::= 〈equality〉 ? 〈equality〉 : 〈equality〉
+〈conditional〉 ::= 〈equality〉 ? 〈expression〉 : 〈conditional〉
 〈equality〉 ::= <comparison> ( ( != | == ) <comparison> )∗;
 〈comparison〉 ::= <term> ( ( > | >= | < | <= ) <term> )∗;
 〈term〉 ::= <factor> ( ( − | + ) <factor> )∗;
