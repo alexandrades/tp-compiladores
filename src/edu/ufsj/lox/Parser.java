@@ -118,13 +118,13 @@ class Parser {
 		return primary();
 	}
 
-	private Expr ternary(Expr expr) {
-		Expr expr = equality()
+	private Expr ternary() {
+		Expr expr = equality();
 
 		if(match(INTERROGATION)) {
 			Expr ifTrue = expression();
 
-			if(match(TWO_DOTS)){
+			if(match(COLON)){
 				Expr ifFalse = ternary();
 				expr = new Expr.Ternary(expr, ifTrue, ifFalse);
 			}

@@ -134,7 +134,7 @@ class Scanner {
 				addToken(INTERROGATION);
 				break;
 			case ':':
-				addToken(TWO_DOTS);
+				addToken(COLON);
 				break;
 
 			case '/':
